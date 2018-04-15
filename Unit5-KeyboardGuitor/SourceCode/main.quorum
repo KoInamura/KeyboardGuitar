@@ -1,0 +1,305 @@
+use Libraries.Game.Game
+use Libraries.Game.Graphics.Drawable
+use Libraries.Sound.Audio
+use Libraries.Game.Graphics.Color
+use Libraries.Interface.Events.KeyboardEvent
+use Libraries.Interface.Events.KeyboardListener
+use Libraries.Game.Graphics.Label
+use Libraries.Game.Graphics.Font
+use Libraries.Sound.Speech
+
+class Main is Game, KeyboardListener
+
+    // Instatiating the Drawable objects for keys
+    Drawable keyC
+    Drawable keyD
+    Drawable keyE
+    Drawable keyF
+    Drawable keyG
+    Drawable keyA
+
+    // Instantiating the Drawable objects for background sceneries
+    Drawable welcomeScreen
+    Drawable concertHall
+    Drawable thanksScreen
+
+    // Instantiating the Font objects
+    Font font1
+    Font font2
+
+    // Instatiating the Label objects
+    Label welcomeLabel
+    Label concertLabel
+    Label thankULabel
+
+    // Instatiating Speech object
+    Speech speech
+
+    // Instantiating the Audio objects for background sound effect
+    Audio introAudio
+    Audio concertBGM
+    Audio cheerAudio
+
+    // Instantiating the Audio objects for notes
+    Audio noteC
+    Audio noteD
+    Audio noteE
+    Audio noteF
+    Audio noteG
+    Audio noteA
+
+    // Instatiating the Color objects
+    Color color
+    Color red = color:Red()
+    Color blue = color:Blue()
+    Color yellow = color:Yellow()
+    Color green = color:Green()
+    Color orange = color:Orange()
+    Color navy = color:Navy()
+    Color purple = color:Purple()
+    Color black = color:Black()
+
+    /*  
+    Declaring a growbal integer that controls the spinning movement of the 
+    key mathematically when a key is pressed and released.
+    */
+    integer rotateC = 0
+    integer rotateD = 0
+    integer rotateE = 0
+    integer rotateF = 0
+    integer rotateG = 0
+    integer rotateA = 0
+    integer rotateB = 0
+
+    action Main
+        say "When the program starts, press 'space key to listen to the comments on each screen.'"
+        StartGame()
+    end
+
+    action CreateGame
+
+        // Loading background screen for each stage 
+        welcomeScreen:LoadFilledRectangle(800, 600, black)
+        Add(welcomeScreen)
+
+        // Calling the actions to get the other screen ready for later use
+        LoadConcertScreenForLaterUse()
+        LoadThanksScreenForLaterUse()
+    
+        // Calling the actions for Setting the specific fonts to be used in the program
+        SettingFonts(font1, "Arial", 48, red)
+        SettingFonts(font2, "Arial", 36, orange)
+
+        // Calling the action for Setting the labels
+        text welcomeComment = "Welcome to the Keyboard Guitar! - While running this program, your keyboard becomes guitar tune player. Your home row keys are the main keyboard - like the white keys on a piano. Some of your upper-low keys are also turned into the half step keys - like the black keys on a piano. If you are ready to play, press ‘1’ to enter your concert hall! have fun jamming!"
+        SetLabelsForEachScreen(welcomeLabel, font2, 700, welcomeComment, 30, 500)
+        welcomeLabel:Show()
+
+        text concertComment = "Press 'escape' to end the concert"
+        SetLabelsForEachScreen(concertLabel, font1, 700, concertComment, 30, 100)
+        concertLabel:Hide()
+
+        text thanksComment = "Thank You!! Press 'escape' to end the program, press '1' to go back into the concert hall."
+        SetLabelsForEachScreen(thankULabel, font1, 700, thanksComment, 50, 500)
+        thankULabel:Hide()
+        
+        /* 
+            Calling the action - you created in this file - to make it easy to Load 
+            and Position the Drawable objects
+        */
+        LoadAndPosition(keyC, 50, 50, red, 80, 200)
+        LoadAndPosition(keyD, 50, 50, blue, 80*2, 200)
+        LoadAndPosition(keyE, 50, 50, yellow, 80*3, 200)
+        LoadAndPosition(keyF, 50, 50, green, 80*4, 200)
+        LoadAndPosition(keyG, 50, 50, orange, 80*5, 200)
+        LoadAndPosition(keyA, 50, 50, navy, 80*6, 200)
+        
+        HideGuitarKeys()
+
+        // Loading the Audio files to the Audio objects to be played later
+        introAudio:Load("media/code/intro-C.ogg")
+        introAudio:EnableLooping()
+        concertBGM:Load("media/code/break.ogg")
+        cheerAudio:Load("media/code/StadiumCheer.ogg")
+
+        // Letting the 'introAudio' to play at the start of the program
+        introAudio:Play()
+        
+        // Loading the audio for each note
+        LoadAllNoteSounds()
+       
+        AddKeyboardListener(me)
+    end
+
+    action Update(number seconds)
+        // Calling the action 'Rotate() on each Drawable object when the corresponding key is pressed'
+        keyC:Rotate(360*seconds*rotateC)
+        keyD:Rotate(360*seconds*rotateD)
+        keyE:Rotate(360*seconds*rotateE)
+        keyF:Rotate(360*seconds*rotateF)
+        keyG:Rotate(360*seconds*rotateG)
+        keyA:Rotate(360*seconds*rotateA)
+    end
+
+    // Creating the keyboard event when a specific key is pressed
+    action PressedKey(KeyboardEvent event)
+        if event:keyCode = event:NUM_1
+            if welcomeScreen:IsShowing()
+                CahngeIntroToConcert()
+            elseif thanksScreen:IsShowing()
+                ChangeThanksToConcert()
+            end
+        elseif event:keyCode = event:ESCAPE
+            if concertHall:IsShowing()
+                ChangeConcertToThanks()
+            elseif thanksScreen:IsShowing()
+                Exit()
+            end
+        elseif event:keyCode = event:SPACE
+            if welcomeScreen:IsShowing()
+                speech:Say(welcomeLabel:GetDescription())
+            elseif concertHall:IsShowing()
+                speech:Say(concertLabel:GetDescription())
+            elseif thanksScreen:IsShowing()
+                speech:Say(thankULabel:GetDescription())
+            end
+        elseif event:keyCode = event:A
+            noteC:Play()
+            rotateC = 1
+        elseif event:keyCode = event:S
+            noteD:Play()
+            rotateD = 1
+        elseif event:keyCode = event:D
+            noteE:Play()
+            rotateE = 1
+        elseif event:keyCode = event:F
+            noteF:Play()
+            rotateF = 1
+        elseif event:keyCode = event:G
+            noteG:Play()
+            rotateG = 1
+        elseif event:keyCode = event:H
+            noteA:Play()
+            rotateA = 1
+        end
+    end
+
+    // Creating the keyboard event when a specific key is released
+    action ReleasedKey(KeyboardEvent event)
+        if event:keyCode = event:A
+            noteC:Stop()
+            rotateC = 0
+        elseif event:keyCode = event:S
+            noteD:Stop()
+            rotateD = 0
+        elseif event:keyCode = event:D
+            noteE:Stop()
+            rotateE = 0
+        elseif event:keyCode = event:F
+            noteF:Stop()
+            rotateF = 0
+        elseif event:keyCode = event:G
+            noteG:Stop()
+            rotateG = 0
+        elseif event:keyCode = event:H
+            noteA:Stop()
+            rotateA = 0
+        end
+    end 
+
+// ************* Creating actions to manage complexity ************************
+
+    // Creating the actions for loading the background screen for each phase of the program
+    action LoadConcertScreenForLaterUse
+        concertHall:Load("/media/code/concert scene1.jpg")
+        Add(concertHall)
+        concertHall:Hide()
+    end
+
+    action LoadThanksScreenForLaterUse
+        thanksScreen:Load("media/code/concertThankU.jpg")
+        Add(thanksScreen)
+        thanksScreen:Hide()
+    end
+
+    action LoadAllNoteSounds
+        noteC:Load("media/code/Guitor-C.ogg")
+        noteD:Load("media/code/Guitor-D.ogg")
+        noteE:Load("media/code/Guitor-E.ogg")
+        noteF:Load("media/code/Guitor-F.ogg")
+        noteG:Load("media/code/Guitor-G.ogg")
+        noteA:Load("media/code/Guitor-A.ogg")
+    end
+
+    // Creating the action to set fonts
+    action SettingFonts(Font font, text style, integer size, Color color)
+        font:LoadFont(style)
+        font:SetSize(size)
+        font:SetColor(color)
+    end
+
+    // Creating the action to set labels
+    action SetLabelsForEachScreen(Label label, Font font, integer labelWidth, text comments, number positionX, number positionY)
+        label:SetFont(font)
+        label:SetWidth(labelWidth)
+        label:SetText(comments)
+        label:SetDescription(comments)
+        label:SetPosition(positionX, positionY)
+        Add(label)
+    end
+
+    // action that helps the drawable objects to set its dimensions, postiion and color
+    action LoadAndPosition(Drawable key, integer width, integer height, Color boxColor, number xPosition, number yPosition)
+        key:LoadFilledRectangle(width, height, boxColor)
+        key:SetPosition(xPosition, yPosition)
+        Add(key)
+    end
+
+    action HideGuitarKeys()
+        keyC:Hide()
+        keyD:Hide()
+        keyE:Hide()
+        keyF:Hide()
+        keyG:Hide()
+        keyA:Hide()
+    end
+
+    action ShowGuitarKeys()
+        keyC:Show()
+        keyD:Show()
+        keyE:Show()
+        keyF:Show()
+        keyG:Show()
+        keyA:Show()
+    end
+
+    action CahngeIntroToConcert
+        introAudio:Stop()
+        welcomeScreen:Hide()
+        welcomeLabel:Hide()
+        concertHall:Show()
+        concertLabel:Show()
+        concertBGM:Play()
+        ShowGuitarKeys()
+    end
+
+    action ChangeThanksToConcert
+        cheerAudio:Stop()
+        thanksScreen:Hide()
+        thankULabel:Hide()
+        concertHall:Show()
+        concertLabel:Show()
+        ShowGuitarKeys()
+        concertBGM:Play()
+    end
+
+    action ChangeConcertToThanks
+        concertBGM:Stop()
+        concertHall:Hide()
+        concertLabel:Hide()
+        HideGuitarKeys()
+        thanksScreen:Show()
+        thankULabel:Show()
+        cheerAudio:Play()
+    end    
+end
