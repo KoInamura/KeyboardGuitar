@@ -12,11 +12,23 @@ class Main is Game, KeyboardListener
 
     // Instatiating the Drawable objects for keys
     Drawable keyC
+    Drawable keyCsharp
     Drawable keyD
+    Drawable keyDsharp
     Drawable keyE
     Drawable keyF
+    Drawable keyFsharp
     Drawable keyG
+    Drawable keyGsharp
     Drawable keyA
+    Drawable keyAsharp
+    Drawable keyB
+    Drawable keyC4
+    Drawable keyC4sharp
+    Drawable keyD4
+    Drawable keyD4sharp
+    Drawable keyE4
+    Drawable keyF4
 
     // Instantiating the Drawable objects for background sceneries
     Drawable welcomeScreen
@@ -42,11 +54,24 @@ class Main is Game, KeyboardListener
 
     // Instantiating the Audio objects for notes
     Audio noteC
+    Audio noteCsharp
     Audio noteD
+    Audio noteDsharp
     Audio noteE
     Audio noteF
+    Audio noteFsharp
     Audio noteG
+    Audio noteGsharp
     Audio noteA
+    Audio noteAsharp
+    Audio noteB
+    Audio noteC4
+    Audio noteC4sharp
+    Audio noteD4
+    Audio noteD4sharp
+    Audio noteE4
+    Audio noteF4
+    
 
     // Instatiating the Color objects
     Color color
@@ -58,18 +83,31 @@ class Main is Game, KeyboardListener
     Color navy = color:Navy()
     Color purple = color:Purple()
     Color black = color:Black()
+    Color white = color:White()
 
     /*  
     Declaring a growbal integer that controls the spinning movement of the 
     key mathematically when a key is pressed and released.
     */
     integer rotateC = 0
+    integer rotateCsharp = 0
     integer rotateD = 0
+    integer rotateDsharp = 0
     integer rotateE = 0
     integer rotateF = 0
+    integer rotateFsharp = 0
     integer rotateG = 0
+    integer rotateGsharp = 0
     integer rotateA = 0
+    integer rotateAsharp = 0
     integer rotateB = 0
+    integer rotateC4 = 0
+    integer rotateC4sharp = 0
+    integer rotateD4 = 0
+    integer rotateD4sharp = 0
+    integer rotateE4 = 0
+    integer rotateF4 = 0
+   
 
     action Main
         say "When the program starts, press 'space key to listen to the comments on each screen.'"
@@ -107,13 +145,28 @@ class Main is Game, KeyboardListener
             Calling the action - you created in this file - to make it easy to Load 
             and Position the Drawable objects
         */
-        LoadAndPosition(keyC, 50, 50, red, 80, 200)
-        LoadAndPosition(keyD, 50, 50, blue, 80*2, 200)
-        LoadAndPosition(keyE, 50, 50, yellow, 80*3, 200)
-        LoadAndPosition(keyF, 50, 50, green, 80*4, 200)
-        LoadAndPosition(keyG, 50, 50, orange, 80*5, 200)
-        LoadAndPosition(keyA, 50, 50, navy, 80*6, 200)
+        LoadAndPosition(keyC, 40, 40, red, 60, 200)
+        LoadAndPosition(keyD, 40, 40, blue, 60*2, 200)
+        LoadAndPosition(keyE, 40, 40, yellow, 60*3, 200)
+        LoadAndPosition(keyF, 40, 40, green, 60*4, 200)
+        LoadAndPosition(keyG, 40, 40, orange, 60*5, 200)
+        LoadAndPosition(keyA, 40, 40, navy, 60*6, 200)
+        LoadAndPosition(keyB, 40, 40, purple, 60*7, 200)
+        LoadAndPosition(keyC4, 40, 40, red, 60*8, 200)
+        LoadAndPosition(keyD4, 40, 40, blue, 60*9, 200)
+        LoadAndPosition(keyE4, 40, 40, yellow, 60*10, 200)
+        LoadAndPosition(keyF4, 40, 40, green, 60*11, 200)
+
+        // Loading and Positioning the half step keys bove the main keys 
         
+        LoadAndPosition(keyCsharp, 40, 40, black, 90, 300)
+        LoadAndPosition(keyDsharp, 40, 40, black, 90+60, 300)
+        LoadAndPosition(keyFsharp, 40, 40, green, 90+60*3, 300)
+        LoadAndPosition(keyGsharp, 40, 40, orange, 90+60*4, 300)
+        LoadAndPosition(keyAsharp, 40, 40, navy, 90+60*5, 300)
+        LoadAndPosition(keyC4sharp, 40, 40, purple, 90+60*7, 300)
+        LoadAndPosition(keyD4sharp, 40, 40, red, 90+60*8, 300)
+
         HideGuitarKeys()
 
         // Loading the Audio files to the Audio objects to be played later
@@ -125,20 +178,35 @@ class Main is Game, KeyboardListener
         // Letting the 'introAudio' to play at the start of the program
         introAudio:Play()
         
-        // Loading the audio for each note
+        // Callinc action for Loading the audio for each note
         LoadAllNoteSounds()
        
         AddKeyboardListener(me)
     end
 
     action Update(number seconds)
-        // Calling the action 'Rotate() on each Drawable object when the corresponding key is pressed'
+        /* 
+        Calling the action 'Rotate()' - from Drawable class -  on each Drawable 
+        object when the corresponding key is pressed' 
+        */
         keyC:Rotate(360*seconds*rotateC)
+        keyCsharp:Rotate(360*seconds*rotateCsharp)
         keyD:Rotate(360*seconds*rotateD)
+        keyDsharp:Rotate(360*seconds*rotateDsharp)
         keyE:Rotate(360*seconds*rotateE)
         keyF:Rotate(360*seconds*rotateF)
+        keyFsharp:Rotate(360*seconds*rotateFsharp)
         keyG:Rotate(360*seconds*rotateG)
+        keyGsharp:Rotate(360*seconds*rotateGsharp)
         keyA:Rotate(360*seconds*rotateA)
+        keyAsharp:Rotate(360*seconds*rotateAsharp)
+        keyB:Rotate(360*seconds*rotateB)
+        keyC4:Rotate(360*seconds*rotateC4)
+        keyC4sharp:Rotate(360*seconds*rotateC4sharp)
+        keyD4:Rotate(360*seconds*rotateD4)
+        keyD4sharp:Rotate(360*seconds*rotateD4sharp)
+        keyE4:Rotate(360*seconds*rotateE4)
+        keyF4:Rotate(360*seconds*rotateF4)
     end
 
     // Creating the keyboard event when a specific key is pressed
@@ -181,6 +249,42 @@ class Main is Game, KeyboardListener
         elseif event:keyCode = event:H
             noteA:Play()
             rotateA = 1
+        elseif event:keyCode = event:J
+            noteB:Play()
+            rotateB = 1
+        elseif event:keyCode = event:K
+            noteC4:Play()
+            rotateC4 = 1
+        elseif event:keyCode = event:L
+            noteD4:Play()
+            rotateD4 = 1
+        elseif event:keyCode = event:SEMICOLON
+            noteE4:Play()
+            rotateE4 = 1
+        elseif event:keyCode = event:APOSTROPHE
+            noteF4:Play()
+            rotateF4 = 1
+        elseif event:keyCode = event:W
+            noteCsharp:Play()
+            rotateCsharp = 1
+        elseif event:keyCode = event:E
+            noteDsharp:Play()
+            rotateDsharp = 1
+        elseif event:keyCode = event:T
+            noteFsharp:Play()
+            rotateFsharp = 1
+        elseif event:keyCode = event:Y
+            noteGsharp:Play()
+            rotateGsharp = 1
+        elseif event:keyCode = event:U
+            noteAsharp:Play()
+            rotateAsharp = 1
+        elseif event:keyCode = event:O
+            noteC4sharp:Play()
+            rotateC4sharp = 1
+        elseif event:keyCode = event:P
+            noteD4sharp:Play()
+            rotateD4sharp = 1
         end
     end
 
@@ -204,6 +308,42 @@ class Main is Game, KeyboardListener
         elseif event:keyCode = event:H
             noteA:Stop()
             rotateA = 0
+        elseif event:keyCode = event:J
+            noteB:Stop()
+            rotateB = 0
+        elseif event:keyCode = event:K
+            noteC4:Stop()
+            rotateC4 = 0
+        elseif event:keyCode = event:L
+            noteD4:Stop()
+            rotateD4 = 0
+        elseif event:keyCode = event:SEMICOLON
+            noteE4:Stop()
+            rotateE4 = 0
+        elseif event:keyCode = event:APOSTROPHE
+            noteF4:Stop()
+            rotateF4 = 0
+        elseif event:keyCode = event:W
+            noteCsharp:Stop()
+            rotateCsharp = 0
+        elseif event:keyCode = event:E
+            noteDsharp:Stop()
+            rotateDsharp = 0
+        elseif event:keyCode = event:T
+            noteFsharp:Stop()
+            rotateFsharp = 0
+        elseif event:keyCode = event:Y
+            noteGsharp:Stop()
+            rotateGsharp = 0
+        elseif event:keyCode = event:U
+            noteAsharp:Stop()
+            rotateAsharp = 0
+        elseif event:keyCode = event:O
+            noteC4sharp:Stop()
+            rotateC4sharp = 0
+        elseif event:keyCode = event:P
+            noteD4sharp:Stop()
+            rotateD4sharp = 0
         end
     end 
 
@@ -222,13 +362,26 @@ class Main is Game, KeyboardListener
         thanksScreen:Hide()
     end
 
+    // Creating actions for loading audio to the 'note' obejcts
     action LoadAllNoteSounds
-        noteC:Load("media/code/Guitor-C.ogg")
-        noteD:Load("media/code/Guitor-D.ogg")
-        noteE:Load("media/code/Guitor-E.ogg")
-        noteF:Load("media/code/Guitor-F.ogg")
-        noteG:Load("media/code/Guitor-G.ogg")
-        noteA:Load("media/code/Guitor-A.ogg")
+        noteC:Load("media/code/Guitar-C.ogg")
+        noteCsharp:Load("media/code/Guitar-C-sharp.ogg")
+        noteD:Load("media/code/Guitar-D.ogg")
+        noteDsharp:Load("media/code/Guitar-D-sharp.ogg")
+        noteE:Load("media/code/Guitar-E.ogg")
+        noteF:Load("media/code/Guitar-F.ogg")
+        noteFsharp:Load("media/code/Guitar-F-sharp.ogg")
+        noteG:Load("media/code/Guitar-G.ogg")
+        noteGsharp:Load("media/code/Guitar-G-sharp.ogg")
+        noteA:Load("media/code/Guitar-A.ogg")
+        noteAsharp:Load("media/code/Guitar-A-sharp.ogg")
+        noteB:Load("media/code/Guitar-B.ogg")
+        noteC4:Load("media/code/Guitar-C4.ogg")
+        noteC4sharp:Load("media/code/Guitar-C4-sharp.ogg")
+        noteD4:Load("media/code/Guitar-D4.ogg")
+        noteD4sharp:Load("media/code/Guitar-D4-sharp.ogg")
+        noteE4:Load("media/code/Guitar-E4.ogg")
+        noteF4:Load("media/code/Guitar-F4.ogg")
     end
 
     // Creating the action to set fonts
@@ -257,20 +410,44 @@ class Main is Game, KeyboardListener
 
     action HideGuitarKeys()
         keyC:Hide()
+        keyCsharp:Hide()
         keyD:Hide()
+        keyDsharp:Hide()
         keyE:Hide()
         keyF:Hide()
+        keyFsharp:Hide()
         keyG:Hide()
+        keyGsharp:Hide()
         keyA:Hide()
+        keyAsharp:Hide()
+        keyB:Hide()
+        keyC4:Hide()
+        keyC4sharp:Hide()
+        keyD4:Hide()
+        keyD4sharp:Hide()
+        keyE4:Hide()
+        keyF4:Hide()
     end
 
     action ShowGuitarKeys()
         keyC:Show()
+        keyCsharp:Show()
         keyD:Show()
+        keyDsharp:Show()
         keyE:Show()
         keyF:Show()
+        keyFsharp:Show()
         keyG:Show()
+        keyGsharp:Show()
         keyA:Show()
+        keyAsharp:Show()
+        keyB:Show()
+        keyC4:Show()
+        keyC4sharp:Show()
+        keyD4:Show()
+        keyD4sharp:Show()
+        keyE4:Show()
+        keyF4:Show()
     end
 
     action CahngeIntroToConcert
