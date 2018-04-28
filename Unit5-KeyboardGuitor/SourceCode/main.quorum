@@ -110,7 +110,9 @@ class Main is Game, KeyboardListener
    
 
     action Main
+        // Making your computer to spaek simple instruction before starting the program
         say "When the program starts, press 'space key to listen to the comments on each screen.'"
+
         StartGame()
     end
 
@@ -129,7 +131,7 @@ class Main is Game, KeyboardListener
         SettingFonts(font2, "Arial", 36, orange)
 
         // Calling the action for Setting the labels
-        text welcomeComment = "Welcome to the Keyboard Guitar! - While running this program, your keyboard becomes guitar tune player. Your home row keys are the main keyboard - like the white keys on a piano. Some of your upper-low keys are also turned into the half step keys - like the black keys on a piano. If you are ready to play, press ‘1’ to enter your concert hall! have fun jamming!"
+        text welcomeComment = "Welcome to the Concert Guitarist! - While running this program, your keyboard becomes guitar tune player. Your home row keys are the main keyboard - like the white keys on a piano. Some of your upper-low keys are also turned into the half step keys - like the black keys on a piano. If you are ready to play, press ‘1’ to enter your concert hall! have fun jamming!"
         SetLabelsForEachScreen(welcomeLabel, font2, 700, welcomeComment, 30, 500)
         welcomeLabel:Show()
 
@@ -167,6 +169,7 @@ class Main is Game, KeyboardListener
         LoadAndPosition(keyC4sharp, 40, 40, purple, 90+60*7, 300)
         LoadAndPosition(keyD4sharp, 40, 40, red, 90+60*8, 300)
 
+        // Calling the action for 'hinding' the guitar keys
         HideGuitarKeys()
 
         // Loading the Audio files to the Audio objects to be played later
@@ -211,27 +214,8 @@ class Main is Game, KeyboardListener
 
     // Creating the keyboard event when a specific key is pressed
     action PressedKey(KeyboardEvent event)
-        if event:keyCode = event:NUM_1
-            if welcomeScreen:IsShowing()
-                CahngeIntroToConcert()
-            elseif thanksScreen:IsShowing()
-                ChangeThanksToConcert()
-            end
-        elseif event:keyCode = event:ESCAPE
-            if concertHall:IsShowing()
-                ChangeConcertToThanks()
-            elseif thanksScreen:IsShowing()
-                Exit()
-            end
-        elseif event:keyCode = event:SPACE
-            if welcomeScreen:IsShowing()
-                speech:Say(welcomeLabel:GetDescription())
-            elseif concertHall:IsShowing()
-                speech:Say(concertLabel:GetDescription())
-            elseif thanksScreen:IsShowing()
-                speech:Say(thankULabel:GetDescription())
-            end
-        elseif event:keyCode = event:A
+        
+        if event:keyCode = event:A
             noteC:Play()
             rotateC = 1
         elseif event:keyCode = event:S
@@ -285,6 +269,37 @@ class Main is Game, KeyboardListener
         elseif event:keyCode = event:P
             noteD4sharp:Play()
             rotateD4sharp = 1
+
+        /*  Setting number '1' key for changing from introduction screen to Concert 
+            Hall screen if the user is int the introduction screen. If the user is 
+            in the Thank you screen, the same key changes the scne and the program 
+            function back to the concert hall. If the user is in the concert hall
+            the 'escape key' will change the scene to the 'Thank you' screen. If the
+            user is in the 'Thank you' screen, the same key will 'end/exit' the 
+            program
+        */
+        elseif event:keyCode = event:NUM_1
+            if welcomeScreen:IsShowing()
+                ChangeIntroToConcert()
+            elseif thanksScreen:IsShowing()
+                ChangeThanksToConcert()
+            end
+        elseif event:keyCode = event:ESCAPE
+            if concertHall:IsShowing()
+                ChangeConcertToThanks()
+            elseif thanksScreen:IsShowing()
+                Exit()
+            end
+
+        //Setting the 'space' key for speaking the instruction on the screen for
+        elseif event:keyCode = event:SPACE
+            if welcomeScreen:IsShowing()
+                speech:Say(welcomeLabel:GetDescription())
+            elseif concertHall:IsShowing()
+                speech:Say(concertLabel:GetDescription())
+            elseif thanksScreen:IsShowing()
+                speech:Say(thankULabel:GetDescription())
+            end
         end
     end
 
@@ -408,6 +423,7 @@ class Main is Game, KeyboardListener
         Add(key)
     end
 
+    // Creating an action to hide all guitar keys
     action HideGuitarKeys()
         keyC:Hide()
         keyCsharp:Hide()
@@ -429,6 +445,7 @@ class Main is Game, KeyboardListener
         keyF4:Hide()
     end
 
+    //Creating an action to show all guitar keys
     action ShowGuitarKeys()
         keyC:Show()
         keyCsharp:Show()
@@ -450,7 +467,7 @@ class Main is Game, KeyboardListener
         keyF4:Show()
     end
 
-    action CahngeIntroToConcert
+    action ChangeIntroToConcert
         introAudio:Stop()
         welcomeScreen:Hide()
         welcomeLabel:Hide()
